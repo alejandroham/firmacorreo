@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pie de Firma</title>
+    <style>
+        @font-face {
+            font-family: 'Bebas Neue';
+            src: url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+        }
+
+        body {
+            font-family: 'Bebas Neue', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .card {
+            width: 800px;
+            height: 400px;
+            background: url('fondo.png') no-repeat center;
+            background-size: contain;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-size: 12px;
+            text-align: left;
+            max-width: 400px;
+            margin-left: 370px;
+            line-height: 1.2;
+            /* Reduce el espacio entre líneas */
+        }
+
+        .info p {
+            margin: 2px 0;
+            /* Reduce el margen superior e inferior de los párrafos */
+        }
+
+        .bold {
+            font-weight: bold;
+            color: #000;
+            font-size: 35px;
+            /* Reduce tamaño de fuente si es necesario */
+        }
+
+        .role {
+            color: #95c6c2;
+            font-weight: bold;
+            font-size: 35px;
+        }
+
+        .email,
+        .phone {
+            font-size: 25px;
+        }
+
+        .icon {
+            width: 25px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        .address {
+            color: #004aad;
+            font-size: 25px;
+        }
+
+        .url {
+            color: #004aad;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background: #ddd;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="Logo-Horizontal_CFT-Biobio grande.png" width="20%" alt="">
+    <h1>Generador de Firma</h1>
+    <p>Complete los campos y haga clic en "Generar" para obtener su firma.</p>
+    <form id="firmaForm">
+        <input type="text" id="nombre" placeholder="Nombres" required>
+        <input type="text" id="apellido" placeholder="Apellidos" required>
+        <input type="text" id="cargo" placeholder="Cargo1 / Cargo2" required>
+        <input type="email" id="correo" placeholder="Correo Institucional" required>
+        <input type="text" id="telefono" placeholder="Teléfono +569...">
+        <select id="direccion" required>
+            <option value="Los Philos #252, Tirúa">Los Philos #252, Tirúa</option>
+            <option value="18 de septiembre #411, Los Álamos">18 de septiembre #411, Los Álamos</option>
+            <option value="Calle Central #501, San Pedro de la Paz">Calle Central #501, San Pedro de la Paz</option>
+        </select>
+        <button type="button" onclick="generarFirma()">Generar</button>
+        <button type="button" onclick="descargarFirma()">Descargar PNG</button>
+    </form>
+
+    <div id="firmaCard" class="card" style="display:none;">
+        <div class="info" id="firmaInfo"></div>
+    </div>
+
+    <footer>
+        Alejandro Aguirre - 2025 CFTE Estatal del Biobío
+    </footer>
+
+    <script>
+        function generarFirma() {
+            const nombre = document.getElementById("nombre").value.trim();
+            const apellido = document.getElementById("apellido").value.trim();
+            const cargo = document.getElementById("cargo").value.trim();
+            const correo = document.getElementById("correo").value.trim();
+            const telefono = document.getElementById("telefono").value.trim();
+            const direccion = document.getElementById("direccion").value;
+
+            if (!nombre || !apellido || !cargo || !correo) {
+                alert("Por favor, complete todos los campos obligatorios.");
+                return;
+            }
+
+            let firmaHTML = `
+                <p class='bold'>${nombre}</p>
+                <p class='bold'>${apellido}</p>
+                <p class='role'>${cargo}</p>
+                <p class='email'><i class="fa-solid fa-envelope"></i> ${correo}</p>
+                ${telefono ? `<p class='phone'><i class="fa-solid fa-phone"></i> ${telefono}</p>` : ''}
+                <p class='address'>${direccion}</p>
+                <p class='url'>http://cftebiobio.cl</p>
+            `;
+
+            document.getElementById("firmaInfo").innerHTML = firmaHTML;
+            document.getElementById("firmaCard").style.display = "flex";
+        }
+
+        function descargarFirma() {
+            html2canvas(document.getElementById("firmaCard"), {
+                width: 800,
+                height: 400,
+                scale: 2
+            }).then(canvas => {
+                let link = document.createElement("a");
+                link.download = "firma.png";
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            });
+        }
+    </script>
+    <script src="https://kit.fontawesome.com/dca0f2a966.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+
+</html>
